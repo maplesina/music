@@ -1,24 +1,39 @@
 <template>
   <div>
+    <van-popup v-model="show" position="left" :style="{ width: '70%',height: '100%' }">
+      <div class="login"
+        v-if="login"
+      >
+        <p>登录过的昵称</p>
+      </div>
+      <div class="nologin"
+        v-else
+      >
+        <p @click="toLogin()">还未登录，请先登录</p>
+      </div>
+    </van-popup>
     <van-row class="bg">
-      <van-col span="3" class="left"><van-icon name="wap-nav" /></van-col>
+      <van-col span="3" class="left">
+        <van-icon name="wap-nav" @click="showLogin()"/>
+      </van-col>
       <van-col span="19">
         <van-search
           v-model="value"
           shape="round"
           placeholder="请输入搜索关键词"
+          @click="toSearch()"
         /></van-col>
       <van-col span="2"></van-col>
     </van-row>
     <!-- banner -->
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <!-- <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item
         v-for="item in bannerList"
         :key="item.id"
       >
         <img class="img1" :src="item.imageUrl" alt="">
       </van-swipe-item>
-    </van-swipe>
+    </van-swipe> -->
     <!-- 主菜单内容区域 -->
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide
@@ -168,6 +183,8 @@ export default {
   name: 'home',
   data () {
     return {
+      login: false,
+      show: false,
       value: '',
       flag: 0,
       songs: [], // 5个排行榜的歌单数据
@@ -199,6 +216,24 @@ export default {
     }
   },
   methods: {
+    /**
+     * 选择登录方式
+     */
+    toLogin () {
+      this.$router.push('login')
+    },
+    /**
+    点击显示左侧登录
+    */
+    showLogin () {
+      this.show = true
+    },
+    /**
+    * 点击跳转到搜索页面
+    */
+    toSearch () {
+      this.$router.push('/search')
+    },
     toTop (index) {
       switch (index) {
         case 0:

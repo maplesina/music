@@ -23,4 +23,5 @@ export default {
   right 0
   height 1.2rem
   background pink
+  z-index 100
 </style>

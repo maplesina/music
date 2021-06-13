@@ -3,8 +3,27 @@ import Vuex from 'vuex'
 import axios from 'axios'
 Vue.use(Vuex)
 
+const nickName = getCookie('nickName') ? getCookie('nickName') : ''
+console.log(getCookie(nickName))
+function getCookie (name) {
+  var strcookie = document.cookie // 获取cookie字符串
+  var arrcookie = strcookie.split(';') // 分割
+  // 遍历匹配
+  for (var i = 0; i < arrcookie.length; i++) {
+    var arr = arrcookie[i].split('=')
+    if (arr[0] === name) {
+      return arr[1]
+    }
+  }
+  return ''
+}
+var s = getCookie('nickName')
+console.log(s)
 export default new Vuex.Store({
   state: {
+    nickName,
+    songsList: [], // 歌单列表
+    idx: 0, // 播放歌曲的索引
     showfull: false, // 全屏播放器
     isShowMin: false, // mini播放器开关
     mp3Info: {
@@ -31,6 +50,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    nick (state, nick) {
+      state.nickName = nick
+    },
     info (state, data) {
       state.mp3Info.name = data[1]
       state.mp3Info.play = true
@@ -48,6 +70,18 @@ export default new Vuex.Store({
     toFull (state) {
       state.showfull = true
       state.isShowMin = false
+    },
+    songsList (state, obj) {
+      if (obj[0].tracks) {
+        state.songsList = obj[0].tracks
+      } else {
+        state.songsList = obj[0]
+      }
+      // state.songsList = obj[0].tracks
+      state.idx = obj[1]
+    },
+    index (state, i) {
+      state.idx = i
     }
   },
   modules: {

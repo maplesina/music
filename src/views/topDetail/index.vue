@@ -18,7 +18,7 @@
       <ul>
         <li class="list-item"
           v-for="(item, index) in list.tracks"
-          @click="palyMusic(item.id, item.name)"
+          @click="palyMusic(item.id, item.name, index)"
           :key="index"
         >
           <div class="left-item">
@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import bus from '@/bus.js'
 export default {
   name: 'topDetail',
   data () {
@@ -42,9 +43,11 @@ export default {
     }
   },
   methods: {
-    palyMusic (id, name) { // 不能在这个地方请求mp3地址
+    palyMusic (id, name, index) { // 不能在这个地方请求mp3地址
       this.$store.dispatch('full', [id, name]) // 需要开启全屏播放器,获取MP3
       this.$store.dispatch('getLrc', id) // 获取歌词
+      this.$store.commit('songsList', [this.list, index])// 传递歌曲列表，当前播放歌曲的下标
+      bus.$emit('show')
     },
     getResult () {
       const url = `/api/playlist/detail?id=${this.$route.params.id}`
